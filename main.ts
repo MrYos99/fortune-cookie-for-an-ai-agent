@@ -8,6 +8,13 @@ import { join } from "node:path";
 
 const fortune = "The stars say you will be fine. The stars were fine-tuned.";
 
+// The gate (competition.yaml): /output/entry.txt must be UTF-8 text of
+// 1 to 140 characters, not only white space. Refuse to write anything
+// else, so a bad line fails loudly here instead of at the sealed scorer.
+if (fortune.length < 1 || fortune.length > 140 || fortune.trim().length === 0) {
+  throw new Error(`fortune must be 1-140 characters, got ${fortune.length}`);
+}
+
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, "entry.txt"), fortune, "utf8");
